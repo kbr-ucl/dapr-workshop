@@ -6,33 +6,24 @@ Download and install the following locally:
 
 - [Docker](https://docs.docker.com/engine/install/)
 - [Visual Studio Code](https://code.visualstudio.com/download)
-- [Dev Containers - Optional but recommended](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
+- Visual Studio 2022 latest version
 
-If you use the [devcontainer](https://containers.dev/) configuration for the .NET or Python workshop challenges, you don't need anything else, since everything is already part of the devcontainer. Continue to the [Considerations](#considerations) section.
-
-If you're **not** using the devcontainer option you will also need to install:
+You will also need to install:
 
 - [REST Client for VS Code](https://marketplace.visualstudio.com/items?itemName=humao.rest-client)
-- [Database Client for VSCode](https://marketplace.visualstudio.com/items?itemName=cweijan.vscode-database-client2) or [Redis Insight](https://redis.io/insight/) (optional to visualize Redis data)
+- [Database Client for VSCode](https://marketplace.visualstudio.com/items?itemName=cweijan.vscode-database-client2)
 - [Powershell](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.4) (for Windows users)
 
-Today the workshop is offered in two languages, Python and .NET. For the language of your choice you will also need to install the following:
+You will also need to install the following:
 
-<details>
-<summary>Python</summary>
-
-- [Python 3](https://www.python.org/downloads/)
-- [Python Extension for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=ms-python.python)
-
-</details>
 <details>
 <summary>.NET</summary>
 
-- [dotnet 8.0](https://dotnet.microsoft.com/download/dotnet/8.0)
+- [dotnet 9.0](https://dotnet.microsoft.com/download/dotnet/9.0)
 - [C# Extension for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csharp)
 - [.NET Global Tool](https://learn.microsoft.com/en-us/dotnet/core/porting/upgrade-assistant-install) 
 
-</details>
+
 
 ## Dapr Installation
 
@@ -74,10 +65,6 @@ docker run -d --name redisinsight -p 5540:5540 redis/redisinsight:latest
 When adding the Redis database, set the host to: host.docker.internal
 
 ## Considerations
-
-### Integrated terminal
-
-It is recommended to use Visual Studio Code to run the workshop. You will use the integrated terminal in VS Code extensively. All terminal commands have been tested on a Apple M3 Pro, and on a Windows 11 laptop using DevContainers.
 
 ### Prevent port collisions
 
@@ -133,35 +120,7 @@ INFO[0000] Initialized name resolution to consul ...
 
 ## Getting started
 
-Initialize your environment in your language of choice.
-
-<details>
-
-<summary>Python</summary>
-
-In your terminal, run:
-
-```bash
-git clone https://github.com/diagrid-labs/dapr-workshop-python.git
-cd dapr-workshop-python
-```
-
-Open the `dapr-workshop-python` folder in VSCode. If you want to use the Python devcontainer, select _Open in Container_ when VSCode shows this message.
-
-If you're not using the devcontainer, install `virtualenv` first:
-
-```bash
-pip install virtualenv
-```
-
-Initialize the virtual environment on your local machine or in the devcontainer:
-
-```bash
-python -m venv env
-source env/bin/activate
-```
-
-</details>
+Initialize your environment in your language
 
 <details>
 
@@ -174,11 +133,6 @@ git clone https://github.com/diagrid-labs/dapr-workshop-csharp.git
 cd dapr-worksop-csharp
 ```
 
-Open the `dapr-workshop-csharp` folder in VSCode. If you want to use the .NET devcontainer, select _Open in Container_ when VSCode shows this message.
 
-</details>
 
-You are now ready to begin the first challenge! Choose your path below:
-
-- [Python](/docs/challenge-1/python.md)
-- [C#/.NET](/docs/challenge-1/dotnet.md)
+You are now ready to begin the first challenge! 

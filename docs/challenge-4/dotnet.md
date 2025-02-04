@@ -427,6 +427,19 @@ catch (Exception ex)
 }
 ```
 
+## Creating ManageWorkflowRequest
+
+Inside this `/Models` folder, add to `OrderModels.cs`:
+
+```c#
+public class ManageWorkflowRequest
+{
+    public required string OrderId { get; set; }
+}
+```
+
+
+
 ## Creating the controller
 
 In this section, you will create endpoints to manage the workflow status. Open the file `WorkflowController.cs` inside the `/Controllers` folder.
@@ -594,6 +607,133 @@ dapr run --app-id pizza-workflow --app-protocol http --app-port 8005 --dapr-http
 > If you are using Consul as a naming resolution service, add `--config ../resources/config/config.yaml` before `-- dotnet run` on your Dapr run command.
 
 ## Test the service
+
+### Create Endpoints.http
+
+In the  `start-here` folder.  Add the file  `Endpoints.http`: 
+
+```
+### Variables
+@pizzaOrderUrl = http://localhost:8001
+@pizzaStorefrontUrl = http://localhost:8002
+@pizzaKitchenUrl = http://localhost:8003
+@pizzaDeliveryUrl = http://localhost:8004
+@pizzaWorkflowUrl = http://localhost:8005
+@workflow_dapr_url = http://localhost:3505
+
+### Direct Pizza Order Endpoint (for testing)
+POST {{pizzaOrderUrl}}/order
+Content-Type: application/json
+
+{
+    "orderId": "123",
+    "pizzaType": "pepperoni",
+    "size": "large",
+    "customer": {
+        "name": "John Doe",
+        "address": "123 Main St",
+        "phone": "555-0123"
+    }
+}
+
+### Get order status (from pizza-order service)
+GET {{pizzaOrderUrl}}/order/123
+
+### Delete order (from pizza-order service)
+DELETE {{pizzaOrderUrl}}/order/123
+
+### Direct Pizza Store Endpoint (for testing)
+POST {{pizzaStorefrontUrl}}/storefront/order
+Content-Type: application/json
+
+{
+    "orderId": "123",
+    "pizzaType": "pepperoni",
+    "size": "large",
+    "customer": {
+        "name": "John Doe",
+        "address": "123 Main St",
+        "phone": "555-0123"
+    }
+}
+
+### Direct Pizza Kitchen Endpoint (for testing)
+POST {{pizzaKitchenUrl}}/cooking
+Content-Type: application/json
+
+{
+    "orderId": "123",
+    "pizzaType": "pepperoni",
+    "size": "large",
+    "status": "ordered"
+}
+
+### Direct Pizza Delivery Endpoint (for testing)
+POST {{pizzaDeliveryUrl}}/delivery
+Content-Type: application/json
+
+{
+    "orderId": "123",
+    "pizzaType": "pepperoni",
+    "size": "large",
+    "status": "cooked"
+}
+
+### Start a new pizza order workflow
+POST {{pizzaWorkflowUrl}}/workflow/start-order
+Content-Type: application/json
+
+{
+    "orderId": "2",
+    "pizzaType": "pepperoni",
+    "size": "large",
+    "customer": {
+        "name": "John Doe",
+        "address": "123 Main St",
+        "phone": "555-0123"
+    }
+}
+
+### Start workflow endpoint using Dapr API
+@name wfrequest
+POST {{workflow_dapr_url}}/v1.0-beta1/workflows/dapr/PizzaOrderingWorkflow/start?instanceID=pizza-order-3
+Content-Type: application/json
+
+{
+    "orderId": "3",
+    "pizzaType": "pepperoni",
+    "size": "large",
+    "customer": {
+        "name": "John Doe",
+        "address": "123 Main St",
+        "phone": "555-0123"
+    }
+}
+
+### Get workflow status
+@wfrequest_instanceID={{wfrequest.response.body.instanceID}}
+GET {{workflow_dapr_url}}/v1.0-beta1/workflows/dapr/pizza-order-1
+
+### Validate pizza (approve)
+POST {{pizzaWorkflowUrl}}/workflow/validate-pizza
+Content-Type: application/json
+
+{
+    "orderId": "1",
+    "approved": true
+}
+
+### Validate pizza (reject)
+POST {{pizzaWorkflowUrl}}/workflow/validate-pizza
+Content-Type: application/json
+
+{
+    "orderId": "1",
+    "approved": false
+}
+```
+
+
 
 ### Use VS Code REST Client
 

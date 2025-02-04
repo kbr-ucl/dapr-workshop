@@ -14,9 +14,11 @@ In this challenge, you will:
 
 To learn more about the Dapr State Management Building Block, refer to the [Dapr docs](https://docs.dapr.io/developing-applications/building-blocks/state-management/state-management-overview/).
 
+In your newly cloned `dapr-workshop-csharp` repository, navigate to the `start-here` folder 
+
 ## Configure the state store
 
-In your newly cloned `dapr-workshop-csharp` repository, navigate to the `/resources` folder and create a new file called `statestore.yaml`. Add the content below to the file:
+Navigate to the `/resources` folder and create a new file called `statestore.yaml`. Add the content below to the file:
 
 ```yaml
 apiVersion: dapr.io/v1alpha1
@@ -34,6 +36,8 @@ spec:
 ```
 
 This is a Dapr Component specification file named `pizzastatestore`. In the _spec_ definition, note that the type of the component is `state.redis` and the metadata contains host and password information for the local Redis instance that was deployed as a container during Dapr's initialization process.
+
+
 
 ## Install dependencies
 
@@ -263,9 +267,20 @@ curl -H 'Content-Type: application/json' \
 
 ### Visualize the data
 
-If you downloaded Redis Insight, you can visualize the new order there:
+If you downloaded Database Client for VSCode or Redis Insight, you can visualize the new order there:
 
-![redis-insight](/imgs/redis-insight.png)
+![redis-insight](../../imgs/redis-insight.png)
+
+If you use Redis Insight from docker:
+```bash
+docker run -d --name redisinsight -p 5540:5540 redis/redisinsight:latest
+```
+When adding the Redis database, set the host to: host.docker.internal
+
+If you need to reset the Redis Database, open a new terminal and  run the following command:
+```bash
+docker exec -it dapr_redis redis-cli FLUSHALL
+```
 
 ## Next steps
 
