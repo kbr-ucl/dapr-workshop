@@ -4,7 +4,7 @@
 
 Diagrid has published a very nice Dapr Workshop - C# - [Link](https://github.com/diagrid-labs/dapr-workshop-csharp).
 
-This challenge builds on top of Aspire - Challenge 4 (Workflow)::
+This challenge builds on top of Aspire - Challenge 4 (Workflow) - [Link](https://github.com/kbr-ucl/dapr-workshop/blob/main/docs/challenge-4/challenge-4-aspire.md):
 
 - Aspire .NET is used to compose the services. Also Aspire -NET substitutes Dapr component files.
 - Communication between the Workflow service and the microservices is changed from "Invocation" to "Pub/Sub".
@@ -14,35 +14,8 @@ This challenge builds on top of Aspire - Challenge 4 (Workflow)::
 ## Prepare
 ### Setup codebase
 - Fork the repository `https://github.com/diagrid-labs/dapr-workshop-csharp`
+- Work your way through [Aspire - Challenge 4 (Workflow)](https://github.com/kbr-ucl/dapr-workshop/blob/main/docs/challenge-4/challenge-4-aspire.md)
 - Create a new branch `aspire-challenge-5`
-
-
-
-### Add  .NET Aspire Orchestration Support
-
-- Right click `PizzaStorefront`project and add  `.NET Aspire Orchestration Support`
-
-- Right click `PizzaKitchen`project and add  `.NET Aspire Orchestration Support`
-
-- Right click `PizzaDelivery`project and add  `.NET Aspire Orchestration Support`
-
-- Right click `PizzaOrder`project and add  `.NET Aspire Orchestration Support`
-
-- Right click `PizzaWorkflow`project and add  `.NET Aspire Orchestration Support`
-
-
-
-### Hosting integration
-
-In your .NET Aspire solution, to integrate Dapr and access its types and APIs, add the [📦 Aspire.Hosting.Dapr](https://www.nuget.org/packages/Aspire.Hosting.Dapr) NuGet package in the `DaprWorkshop.AppHost` project.
-
-```powershell
-dotnet add package Aspire.Hosting.Dapr
-```
-
-### Nuget update
-
-Use Nuget Packet Manager for solution to update packets.
 
 
 
@@ -814,7 +787,7 @@ public class PizzaOrderingWorkflow : Workflow<Order, Order>
                 nameof(DeliveryActivity),
                 cookingResult);
 
-            var deliveryResult = await context.WaitForExternalEventAsync<Order>("CookComplete");
+            var deliveryResult = await context.WaitForExternalEventAsync<Order>("DeliverComplete");
 
             if (deliveryResult.Status != "delivered")
                 throw new Exception($"Delivery failed: {deliveryResult.Error ?? "Unknown error"}");
@@ -836,7 +809,7 @@ public class PizzaOrderingWorkflow : Workflow<Order, Order>
 
 #### Changes to `WorkflowController.cs`
 
-Changes to the method `OrderStatus`
+Add this code:
 
 ```c#
     [HttpPost("order-status")]
