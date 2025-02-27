@@ -24,19 +24,9 @@ Create a new branch `aspire-challenge-4`
 
 ## Dapr Resources
 
-The bad news is - Dapr yaml files are back :-(
+Aspire .NET is used to compose the services. Also Aspire .NET substitutes Dapr component files.
 
-When more advanced component setup is needed - you still have to use yaml files to specify the components.
-
-To learn more: https://anthonysimmon.com/dotnet-aspire-best-way-to-experiment-dapr-local-dev/
-
-### For workflow to work
-
-You need the following resources (copied from  `challenge-4`)
-
-- pubsub.yaml
-- statestore.yaml
-- subscription.yaml
+When you choose to move Dapr pub/sub component setup into Aspire (instead of Dapr component files). You have to use Programmatic Pub/sub API subscription (Link: [Pub/sub API subscription types](https://docs.dapr.io/developing-applications/building-blocks/pubsub/subscription-methods/#pubsub-api-subscription-types) )
 
 
 
@@ -62,63 +52,83 @@ To add a sidecar to a .NET Aspire resource, call the [WithDaprSidecar](https://l
 
 ```c#
 using Aspire.Hosting.Dapr;
-using System.Collections.Immutable;
 
 var builder = DistributedApplication.CreateBuilder(args);
+
+var statestore = builder.AddDaprStateStore("pizzastatestore");
+var pubsubComponent = builder.AddDaprPubSub("pizzapubsub");
 
 builder.AddProject<Projects.PizzaOrder>("pizzaorderservice")
     .WithDaprSidecar(new DaprSidecarOptions
     {
         AppId = "pizza-order",
-        DaprHttpPort = 3501,
-        ResourcesPaths = ImmutableHashSet.Create("../resources")
-    });
-
+        DaprHttpPort = 3501
+    })
+    .WithReference(statestore)
+    .WithReference(pubsubComponent);
 
 builder.AddProject<Projects.PizzaKitchen>("pizzakitchenservice")
     .WithDaprSidecar(new DaprSidecarOptions
     {
         AppId = "pizza-kitchen",
-        DaprHttpPort = 3503,
-        ResourcesPaths = ImmutableHashSet.Create("../resources")
-    });
-
+        DaprHttpPort = 3503
+    })
+    .WithReference(pubsubComponent);
 
 builder.AddProject<Projects.PizzaStorefront>("pizzastorefrontservice")
     .WithDaprSidecar(new DaprSidecarOptions
     {
         AppId = "pizza-storefront",
-        DaprHttpPort = 3502,
-        ResourcesPaths = ImmutableHashSet.Create("../resources")
-    });
-
+        DaprHttpPort = 3502
+    })
+    .WithReference(pubsubComponent);
 
 builder.AddProject<Projects.PizzaDelivery>("pizzadeliveryservice")
     .WithDaprSidecar(new DaprSidecarOptions
     {
         AppId = "pizza-delivery",
-        DaprHttpPort = 3504,
-        ResourcesPaths = ImmutableHashSet.Create("../resources")
-    });
-
+        DaprHttpPort = 3504
+    })
+    .WithReference(pubsubComponent);
 
 builder.AddProject<Projects.PizzaWorkflow>("pizzaworkflowservice")
     .WithDaprSidecar(new DaprSidecarOptions
     {
         AppId = "pizza-workflow",
         DaprHttpPort = 3505,
-        ResourcesPaths = ImmutableHashSet.Create("../resources")
-    });
-
+    })
+    .WithReference(statestore)
+    .WithReference(pubsubComponent);
 
 builder.Build().Run();
 ```
 
 ## Application changes
 
-Since we are using Dapr component files (resources) we can return to declarative PubSub. 
+Since we are using Aspire component files (resources) we can have to return switch Dapr programmatic PubSub. 
 
 ### Changes in `PizzaOrder`
+
+#### Changes to `OrderController.cs`
+
+Change `HandleOrderUpdate` to programmatic pub/sub 
+
+```c#
+    [HttpPost("/orders-sub")]
+    [Topic("pizzapubsub", "orders")] // Programmatic Dapr pub/sub topic 
+    public async Task<IActionResult> HandleOrderUpdate(Order cloudEvent)
+    {
+        _logger.LogInformation("Received order update for order {OrderId}", 
+            cloudEvent.OrderId);
+
+        var result = await _orderStateService.UpdateOrderStateAsync(cloudEvent);
+        return Ok();
+    }
+}
+```
+
+
+
 #### In program.cs:
 
 ```c#
@@ -146,6 +156,9 @@ if (app.Environment.IsDevelopment())
 // Dapr will send serialized event object vs. being raw CloudEvent
 app.UseCloudEvents();
 
+// Needed for Programmatic Dapr pub/sub routing
+app.MapSubscribeHandler();
+
 app.MapControllers();
 app.Run();
 ```
@@ -156,6 +169,7 @@ app.Run();
 
 ```
     [HttpPost("/orders-sub")]
+    [Topic("pizzapubsub", "orders")]
     public async Task<IActionResult> HandleOrderUpdate(Order cloudEvent)
     {
         _logger.LogInformation("Received order update for order {OrderId}", 
