@@ -971,6 +971,14 @@ Use Redis insight to cleanup Redis
 - Remove all Hash keys
 - Remove all streams
 
+Or. You can use this command in a terminal:
+
+```
+docker exec -i dapr_redis redis-cli FLUSHALL
+```
+
+
+
 #### Test setup  
 Add the `Endpoints.http` in the `start-here` folder to the solution.
 
