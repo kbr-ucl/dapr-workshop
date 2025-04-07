@@ -24,18 +24,18 @@ Create a new branch `aspire-challenge-4`
 
 ## Dapr Resources
 
-Aspire .NET is used to compose the services. Also Aspire .NET substitutes Dapr component files.
+Aspire version 1.15.4 uses Dapr resources files.
 
-When you choose to move Dapr pub/sub component setup into Aspire (instead of Dapr component files). You have to use Programmatic Pub/sub API subscription (Link: [Pub/sub API subscription types](https://docs.dapr.io/developing-applications/building-blocks/pubsub/subscription-methods/#pubsub-api-subscription-types) )
+We will use Programmatic Pub/sub API subscription (Link: [Pub/sub API subscription types](https://docs.dapr.io/developing-applications/building-blocks/pubsub/subscription-methods/#pubsub-api-subscription-types) )
 
 
 
 ## Hosting integration
 
-In your .NET Aspire solution, to integrate Dapr and access its types and APIs, add the [📦 Aspire.Hosting.Dapr](https://www.nuget.org/packages/Aspire.Hosting.Dapr) NuGet package in the `DaprWorkshop.AppHost` project.
+In your .NET Aspire solution, to integrate Dapr and access its types and APIs, add the CommunityToolkit.Aspire.Hosting.Dapr NuGet package in the `DaprWorkshop.AppHost` project.
 
 ```powershell
-dotnet add package Aspire.Hosting.Dapr
+dotnet add package CommunityToolkit.Aspire.Hosting.Dapr
 ```
 
 ### Nuget update
@@ -51,54 +51,56 @@ Dapr uses the [sidecar pattern](https://docs.dapr.io/concepts/dapr-services/side
 To add a sidecar to a .NET Aspire resource, call the [WithDaprSidecar](https://learn.microsoft.com/en-us/dotnet/api/aspire.hosting.idistributedapplicationresourcebuilderextensions.withdaprsidecar) method on it. The `appId` parameter is the unique identifier for the Dapr application, but it's optional. If you don't provide an `appId`, the parent resource name is used instead. Also add reference to `ResourcesPaths`  to include the Dapr resources yaml files.
 
 ```c#
-using Aspire.Hosting.Dapr;
+using CommunityToolkit.Aspire.Hosting.Dapr;
+using Projects;
+using System.Collections.Immutable;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
-var statestore = builder.AddDaprStateStore("pizzastatestore");
-var pubsubComponent = builder.AddDaprPubSub("pizzapubsub");
-
-builder.AddProject<Projects.PizzaOrder>("pizzaorderservice")
+builder.AddProject<PizzaOrder>("pizzaorderservice")
     .WithDaprSidecar(new DaprSidecarOptions
     {
         AppId = "pizza-order",
-        DaprHttpPort = 3501
-    })
-    .WithReference(statestore)
-    .WithReference(pubsubComponent);
+        DaprHttpPort = 3501,
+        ResourcesPaths = ImmutableHashSet.Create("../resources")
+    });
 
-builder.AddProject<Projects.PizzaKitchen>("pizzakitchenservice")
+
+builder.AddProject<PizzaKitchen>("pizzakitchenservice")
     .WithDaprSidecar(new DaprSidecarOptions
     {
         AppId = "pizza-kitchen",
-        DaprHttpPort = 3503
-    })
-    .WithReference(pubsubComponent);
+        DaprHttpPort = 3503,
+        ResourcesPaths = ImmutableHashSet.Create("../resources")
+    });
 
-builder.AddProject<Projects.PizzaStorefront>("pizzastorefrontservice")
+
+builder.AddProject<PizzaStorefront>("pizzastorefrontservice")
     .WithDaprSidecar(new DaprSidecarOptions
     {
         AppId = "pizza-storefront",
-        DaprHttpPort = 3502
-    })
-    .WithReference(pubsubComponent);
+        DaprHttpPort = 3502,
+        ResourcesPaths = ImmutableHashSet.Create("../resources")
+    });
 
-builder.AddProject<Projects.PizzaDelivery>("pizzadeliveryservice")
+
+builder.AddProject<PizzaDelivery>("pizzadeliveryservice")
     .WithDaprSidecar(new DaprSidecarOptions
     {
         AppId = "pizza-delivery",
-        DaprHttpPort = 3504
-    })
-    .WithReference(pubsubComponent);
+        DaprHttpPort = 3504,
+        ResourcesPaths = ImmutableHashSet.Create("../resources")
+    });
 
-builder.AddProject<Projects.PizzaWorkflow>("pizzaworkflowservice")
+
+builder.AddProject<PizzaWorkflow>("pizzaworkflowservice")
     .WithDaprSidecar(new DaprSidecarOptions
     {
         AppId = "pizza-workflow",
         DaprHttpPort = 3505,
-    })
-    .WithReference(statestore)
-    .WithReference(pubsubComponent);
+        ResourcesPaths = ImmutableHashSet.Create("../resources")
+    });
+
 
 builder.Build().Run();
 ```

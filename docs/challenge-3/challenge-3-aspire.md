@@ -26,10 +26,10 @@ Create a new branch `aspire-challenge-3`
 
 ## Hosting integration
 
-In your .NET Aspire solution, to integrate Dapr and access its types and APIs, add the [📦 Aspire.Hosting.Dapr](https://www.nuget.org/packages/Aspire.Hosting.Dapr) NuGet package in the `DaprWorkshop.AppHost` project.
+In your .NET Aspire solution, to integrate Dapr and access its types and APIs, add the CommunityToolkit.Aspire.Hosting.Dapr NuGet package in the `DaprWorkshop.AppHost` project.
 
 ```powershell
-dotnet add package Aspire.Hosting.Dapr
+dotnet add package CommunityToolkit.Aspire.Hosting.Dapr
 ```
 
 ### Nuget update
@@ -40,7 +40,7 @@ Use Nuget Packet Manager for solution to update packets.
 
 #### Add Dapr State Store to .NET Aspire resources
 ```c#
-using Aspire.Hosting.Dapr;
+using CommunityToolkit.Aspire.Hosting.Dapr;
 using Projects;
 
 var builder = DistributedApplication.CreateBuilder(args);

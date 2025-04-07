@@ -910,54 +910,51 @@ app.Run();
 ## Changes to DaprWorkshop.AppHost (Program.cs)
 
 ```c#
-using Aspire.Hosting.Dapr;
+using CommunityToolkit.Aspire.Hosting.Dapr;
+using Projects;
+using System.Collections.Immutable;
 
 var builder = DistributedApplication.CreateBuilder(args);
 
-var statestore = builder.AddDaprStateStore("pizzastatestore");
-var pubsubComponent = builder.AddDaprPubSub("pizzapubsub");
-
-builder.AddProject<Projects.PizzaOrder>("pizzaorderservice")
+builder.AddProject<PizzaOrder>("pizzaorderservice")
     .WithDaprSidecar(new DaprSidecarOptions
     {
         AppId = "pizza-order",
-        DaprHttpPort = 3501
-    })
-    .WithReference(statestore)
-    .WithReference(pubsubComponent);
+        DaprHttpPort = 3501,
+        ResourcesPaths = ImmutableHashSet.Create("../resources")
+    });
 
-builder.AddProject<Projects.PizzaKitchen>("pizzakitchenservice")
-    .WithDaprSidecar(new DaprSidecarOptions
-    {
-        AppId = "pizza-kitchen",
-        DaprHttpPort = 3503
-    })
-    .WithReference(pubsubComponent);
+    builder.AddProject<PizzaKitchen>("pizzakitchenservice")
+        .WithDaprSidecar(new DaprSidecarOptions
+        {
+            AppId = "pizza-kitchen",
+            DaprHttpPort = 3503,
+            ResourcesPaths = ImmutableHashSet.Create("../resources")
+        });
 
-builder.AddProject<Projects.PizzaStorefront>("pizzastorefrontservice")
+builder.AddProject<PizzaStorefront>("pizzastorefrontservice")
     .WithDaprSidecar(new DaprSidecarOptions
     {
         AppId = "pizza-storefront",
-        DaprHttpPort = 3502
-    })
-    .WithReference(pubsubComponent);
+        DaprHttpPort = 3502,
+        ResourcesPaths = ImmutableHashSet.Create("../resources")
+    });
 
-builder.AddProject<Projects.PizzaDelivery>("pizzadeliveryservice")
+builder.AddProject<PizzaDelivery>("pizzadeliveryservice")
     .WithDaprSidecar(new DaprSidecarOptions
     {
         AppId = "pizza-delivery",
-        DaprHttpPort = 3504
-    })
-    .WithReference(pubsubComponent);
+        DaprHttpPort = 3504,
+        ResourcesPaths = ImmutableHashSet.Create("../resources")
+    });
 
-builder.AddProject<Projects.PizzaWorkflow>("pizzaworkflowservice")
+builder.AddProject<PizzaWorkflow>("pizzaworkflowservice")
     .WithDaprSidecar(new DaprSidecarOptions
     {
         AppId = "pizza-workflow",
         DaprHttpPort = 3505,
-    })
-    .WithReference(statestore)
-    .WithReference(pubsubComponent);
+        ResourcesPaths = ImmutableHashSet.Create("../resources")
+    });
 
 builder.Build().Run();
 ```
