@@ -290,13 +290,13 @@ dapr run --app-id pizza-storefront --app-protocol http --app-port 8002 --dapr-ht
 2. Open a new terminal window and navigate to `/PizzaKitchen` folder. Run the command below:
 
 ```bash
-dapr run --app-id pizza-kitchen --app-protocol http --app-port 8003 --dapr-http-port 3503  -- dotnet run
+dapr run --app-id pizza-kitchen --app-protocol http --app-port 8003 --dapr-http-port 3503 -- dotnet run
 ```
 
 3. Open a third terminal window and navigate to `/PizzaDelivery` folder. Run the command below:
 
 ```bash
-dapr run --app-id pizza-delivery --app-protocol http --app-port 8004 --dapr-http-port 3504  -- dotnet run
+dapr run --app-id pizza-delivery --app-protocol http --app-port 8004 --dapr-http-port 3504 -- dotnet run
 ```
 
 
