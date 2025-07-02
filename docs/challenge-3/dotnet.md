@@ -338,8 +338,6 @@ INFO[0000] Component loaded: pizzapubsub (pubsub.redis/v1)  app_id=pizza-storefr
 
 ## Test the service
 
-### Use VS Code REST Client
-
 Open `Endpoints.http` and create a new order sending the request on `Direct Pizza Store Endpoint (for testing)`, similar to what was done previous challenge.
 
 Navigate to the `pizza-order` terminal, where you should see the following logs pop up with all the events being updated:
@@ -411,16 +409,6 @@ Navigate to the `pizza-order` terminal, where you should see the following logs 
 == APP ==       Updated state for order 123 - Status: delivered
 ```
 
-### Use _cURL_
-
-Open a fourth terminal window and create a new order using cURL:
-
-```bash
-curl -H 'Content-Type: application/json' \
-   -d '{ "orderId": "1", "pizzaType": "pepperoni", "size": "large", "customer": { "name": "John Doe", "address": "123 Main St", "phone": "555-0123" } }' \
-    -X POST \
-     http://localhost:8002/storefront/order
-```
 
 ## Dapr multi-app run
 

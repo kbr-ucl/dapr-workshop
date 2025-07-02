@@ -213,8 +213,6 @@ INFO[0000] Component loaded: pizzastatestore (state.redis/v1)  app_id=pizza-stor
 
 ## Test the service
 
-### Use VS Code REST Client
-
 Open the `Endpoints.http` file located in the root of the repository and place a new order by clicking the button `Send request` under `Direct Pizza Order Endpoint (for testing)`:
 
 ![send-request](/imgs/rest-request.png)
@@ -238,38 +236,7 @@ Content-Type: application/json
 
 Run the `GET` and `DELETE` requests situated below to get and delete the order as well.
 
-### Use _cURL_
-
-Run the command below to create a new order:
-
-```bash
-curl -H 'Content-Type: application/json' \
-    -d '{ "orderId": "123", "pizzaType": "pepperoni", "size": "large", "customer": { "name": "John Doe", "address": "123 Main St", "phone": "555-0123" } }' \
-    -X POST \
-    http://localhost:8001/order
-```
-
-Get:
-
-```bash
-curl -H 'Content-Type: application/json' \
-    -X GET \
-    http://localhost:8001/order/123
-```
-
-Finally, delete the order:
-
-```bash
-curl -H 'Content-Type: application/json' \
-    -X DELETE \
-    http://localhost:8001/order/123
-```
-
 ### Visualize the data
-
-If you downloaded Database Client for VSCode or Redis Insight, you can visualize the new order there:
-
-![redis-insight](../../imgs/redis-insight.png)
 
 If you use Redis Insight from docker:
 ```bash

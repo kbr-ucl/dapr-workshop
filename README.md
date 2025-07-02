@@ -1,4 +1,4 @@
-# Dapr Workshop
+# Dapr Workshop - introduction
 
 ![Dapr sidecar](imgs/dapr_sidecar_pixelart.png)
 
@@ -28,27 +28,27 @@ You will build five microservices to simulate the process of ordering a pizza:
 
 You will start the workshop by creating the `pizza-order` service. It is responsible for managing the  order state and saving it to a Redis database, using the [Dapr State Management Building Block](https://docs.dapr.io/developing-applications/building-blocks/state-management/). You will learn how to create a Dapr Component specification, and how to use the Dapr SDK to save and retrieve an item using the State Store API.
 
-<img src="/imgs/challenge-1.png" width=50%>
+<img src="imgs/challenge-1.png" width=50%>
 
 ### Challenge 2: Service Invocation
 
 This challenge will focus on synchronous communication between services using the [Dapr Service Invocation Building Block](https://docs.dapr.io/developing-applications/building-blocks/service-invocation/). After the pizza order is saved in the database, you will create the three following services: `pizza-storefront`, `pizza-kitchen`, and `pizza-delivery`. `pizza-storefront` will invoke the endpoints from the other services to cook and deliver the pizza.
 
-<img src="/imgs/challenge-2.png" width=50%>
+<img src="imgs/challenge-2.png" width=50%>
 
 ### Challenge 3: Pub/Sub
 
 In the third challenge, you will add a Pub/Sub component to the `pizza-order` service. You will use the [Dapr Publish & Subscribe Building Block](https://docs.dapr.io/developing-applications/building-blocks/pubsub/) to publish events to a Redis Streams message broker from `pizza-storefront`, `pizza-kitchen`, and `pizza-delivery`. These events represent each stage in the pizza order, cooking, and delivery process. For every event published, the `pizza-order` service will subscribe to it and update the current order status in the Redis State Store.
 
-<img src="/imgs/challenge-3.png" width=60%>
+<img src="imgs/challenge-3.png" width=60%>
 
 ### Challenge 4: Workflows
 
 Now you will modify the application to orchestrate the process of ordering, cooking, and delivering the pizza to use [Dapr's Workflow Building Block](https://docs.dapr.io/developing-applications/building-blocks/workflow/). With that you will guarantee that every step happens in a particular order. A validation state will also be created to guarantee that the pizza was cooked properly before it is delivered.
 
-<img src="/imgs/workflow.png" width=75%>
+<img src="imgs/workflow.png" width=75%>
 
 ## Get started
 
 No existing knowledge of Dapr or microservices is needed to complete this workshop but basic programming skills for your language of choice are required.
-Today this workshop offers challenges in .NET and Python. Complete the [technical prerequisites](./docs/prerequisites.md) and start the first challenge!
+Today this workshop offers challenges in .NET and Python. Complete the technical prerequisites and start the first challenge!

@@ -735,8 +735,6 @@ Content-Type: application/json
 
 
 
-### Use VS Code REST Client
-
 Open `Endpoints.http` and start a new workflow sending the request on `Start a new pizza order workflow
 `.
 

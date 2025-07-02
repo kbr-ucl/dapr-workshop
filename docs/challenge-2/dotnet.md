@@ -305,8 +305,6 @@ dapr run --app-id pizza-delivery --app-protocol http --app-port 8004 --dapr-http
 
 ## Test the service
 
-### Use VS Code REST Client
-
 Open `Endpoints.http` and find the `Direct Pizza Store Endpoint (for testing)` endpoint call. Click on `Send request`
 
 Navigate to the `pizza-storefront` terminal, where you should see the following logs:
@@ -368,17 +366,6 @@ Finally, on `pizza-delivery`:
 == APP ==       Order 123 - delivery_at_location
 == APP == info: PizzaDelivery.Services.DeliveryService[0]
 == APP ==       Order 123 - delivered
-```
-
-### Use _cURL_
-
-Alternatively, open a third terminal window and create a new order via cURL:
-
-```bash
-curl -H 'Content-Type: application/json' \
-    -d '{ "orderId": "1", "pizzaType": "pepperoni", "size": "large", "customer": { "name": "John Doe", "address": "123 Main St", "phone": "555-0123" } }' \
-    -X POST \
-    http://localhost:8002/storefront/order
 ```
 
 ## Next steps

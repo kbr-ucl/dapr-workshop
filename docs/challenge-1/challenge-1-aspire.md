@@ -8,7 +8,7 @@ Checkout branch `challenge-1`
 
 Create a new branch `aspire-challenge-1`
 
-Right click `PizzaOrder`project and add  `.NET Aspire Orchestration Support
+Right click `PizzaOrder`project and add  `.NET Aspire Orchestration Support`
 
 
 

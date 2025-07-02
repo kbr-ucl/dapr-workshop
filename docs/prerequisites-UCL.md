@@ -5,23 +5,32 @@
 Download and install the following locally:
 
 - [Docker](https://docs.docker.com/engine/install/)
-- [Visual Studio Code](https://code.visualstudio.com/download)
 - Visual Studio 2022 latest version
+- [.NET Global Tool](https://learn.microsoft.com/en-us/dotnet/core/porting/upgrade-assistant-install) 
+
+
 
 You will also need to install:
 
-- [REST Client for VS Code](https://marketplace.visualstudio.com/items?itemName=humao.rest-client)
-- [Database Client for VSCode](https://marketplace.visualstudio.com/items?itemName=cweijan.vscode-database-client2)
 - [Powershell](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.4) (for Windows users)
 
-You will also need to install the following:
 
-<details>
-<summary>.NET</summary>
 
-- [dotnet 9.0](https://dotnet.microsoft.com/download/dotnet/9.0)
-- [C# Extension for Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csharp)
-- [.NET Global Tool](https://learn.microsoft.com/en-us/dotnet/core/porting/upgrade-assistant-install) 
+### Powershell
+
+To determine whether PowerShell may be upgraded with WinGet, run the following command:
+
+```powershell
+winget list --id Microsoft.PowerShell --upgrade-available
+```
+
+If there is an available upgrade, the output indicates the latest available version. Use the following command to upgrade PowerShell using WinGet:
+
+```powershell
+winget upgrade --id Microsoft.PowerShell
+```
+
+[Kilde](https://learn.microsoft.com/da-dk/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.5#msi#deploying-on-windows-10-iot-enterprise)
 
 
 
@@ -122,14 +131,10 @@ INFO[0000] Initialized name resolution to consul ...
 
 Initialize your environment in your language
 
-<details>
-
-<summary>.NET</summary>
-
 In your terminal, run:
 
 ```bash
-git clone https://github.com/diagrid-labs/dapr-workshop-csharp.git
+git clone https://github.com/kbr-ucl/dapr-workshop-csharp.git
 cd dapr-worksop-csharp
 ```
 
